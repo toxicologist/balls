@@ -14,7 +14,7 @@ u = 9
 savehs = True
 
 total = 20
-hs = 0
+
 
 import pygame, random, datetime, sys, pickle
 from pygame.locals import *
@@ -80,6 +80,7 @@ status = 2
 while True:
     
     if status == 2:
+        hs = 0
         display.fill((245, 245, 220))
         display.blit(display, (0,0))
         display.blit(titlefont.render('balls', True, (0,0,0)),(140,100))
