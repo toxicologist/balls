@@ -10,15 +10,33 @@ stuffing = 10
 l = 2
 u = 9
 
-total = 20
+#save high score
+savehs = True
 
-import pygame, random, datetime, sys
+total = 20
+hs = 0
+
+import pygame, random, datetime, sys, pickle
 from pygame.locals import *
 
 pygame.init()
 pygame.display.set_caption('balls')
+pointsfont = pygame.font.SysFont("Arial Bold", 40)
 titlefont = pygame.font.SysFont("Arial Bold Italic", 65)
 ffont = pygame.font.SysFont("Arial", 25)
+
+def geths():
+    try:
+        with open('score.dat', 'rb') as file:
+            score = pickle.load(file)
+    except:
+        score = 0
+    return score
+
+def newhs(score):
+    with open('score.dat', 'wb') as file:
+        pickle.dump(score, file)
+    return 0
 
 def colcheck(a):
     hta = a[0]
@@ -68,6 +86,7 @@ while True:
         display.blit(ffont.render('count the number of balls on each screen as fast as possible', True, (0,0,0)),(140,150))
         display.blit(ffont.render('then press the corresponding number key', True, (0,0,0)),(140,200))
         display.blit(ffont.render('press anything to begin', True, (0,0,0)),(240,300))
+        display.blit(ffont.render('save high score: %s (press h to toggle)' %('enabled' if savehs else 'disabled'), True, (0,0,0)),(140,400))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -77,6 +96,9 @@ while True:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
+                elif event.key == pygame.K_h:
+                    savehs = 0 if savehs else 1
+                    #pygame.display.update()
                 else:
                     status = 1
                     nn = random.randint(l,u)
@@ -120,10 +142,10 @@ while True:
                     if event.key == pygame.K_r:
                         status = 2
                         
-                    if pygame.K_0 <= event.key <= pygame.K_9:
+                    if pygame.K_1 <= event.key <= pygame.K_9:
                         attempt = event.key - pygame.K_0
                         kp = 1
-                    elif pygame.K_KP0 <= event.key <= pygame.K_KP9:
+                    elif pygame.K_KP1 <= event.key <= pygame.K_KP9:
                         attempt = event.key - pygame.K_KP0
                         kp = 1
                     else:
@@ -149,12 +171,24 @@ while True:
             break
                 
     if status == 0:
+            avg_time = float('%.3f' %(sum(times)/len(times)))
+            accuracy = score / (total * (total-score)**2) if total-score else 1
+            
+            points = int(accuracy * (1/avg_time) * 10000)
             display.fill((245,245,220))
             display.blit(display, (0,0))
             display.blit(ffont.render('finished', True, (0,0,0)),(240,100))
-            display.blit(ffont.render(('score: %s/%s' % (score, total)), True, (0,0,0)),(240,150))
-            display.blit(ffont.render(("average time: %.5f s" % (sum(times)/len(times))), True, (0,0,0)),(240,200))
-            display.blit(ffont.render('press enter to exit or R to restart', True, (0,0,0)),(240,250))
+            display.blit(ffont.render(('accuracy: %s/%s' % (score, total)), True, (0,0,0)),(240,150))
+            display.blit(ffont.render(("average time: %s s" % avg_time), True, (0,0,0)),(240,200))
+            display.blit(pointsfont.render(("total points: %s" % points), True, (0,0,0)),(240,250))
+            if savehs:
+                hs = 1 if geths()<points or hs==1 else 0
+                if hs:
+                    newhs(points)
+                    display.blit(pointsfont.render(("new highscore: %s" % points), True, (0,0,0)),(240,300))
+                else:
+                    display.blit(ffont.render(("highscore: %s" % geths()), True, (0,0,0)),(240,300))
+            display.blit(ffont.render('press enter to exit or R to restart', True, (0,0,0)),(240,400))
             pygame.display.update()
             
             for event in pygame.event.get():
