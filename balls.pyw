@@ -143,10 +143,10 @@ while True:
                     if event.key == pygame.K_r:
                         status = 2
                         
-                    if pygame.K_1 <= event.key <= pygame.K_9:
+                    if pygame.K_2 <= event.key <= pygame.K_9:
                         attempt = event.key - pygame.K_0
                         kp = 1
-                    elif pygame.K_KP1 <= event.key <= pygame.K_KP9:
+                    elif pygame.K_KP2 <= event.key <= pygame.K_KP9:
                         attempt = event.key - pygame.K_KP0
                         kp = 1
                     else:
@@ -173,7 +173,7 @@ while True:
                 
     if status == 0:
             avg_time = float('%.3f' %(sum(times)/len(times)))
-            accuracy = score / (total * (total-score)**2) if total-score else 1
+            accuracy = score / (total * ((total-score)**1.5)/2) if total-score else 1
             
             points = int(accuracy * (1/avg_time) * 10000)
             display.fill((245,245,220))
