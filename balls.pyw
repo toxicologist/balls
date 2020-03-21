@@ -173,7 +173,7 @@ while True:
                 
     if status == 0:
             avg_time = float('%.3f' %(sum(times)/len(times)))
-            accuracy = score / (total * ((total-score)**1.5)/2) if total-score else 1
+            accuracy = score / (total * (total-score)**2) if total-score else 1
             
             points = int(accuracy * (1/avg_time) * 10000)
             display.fill((245,245,220))
