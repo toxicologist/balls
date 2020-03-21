@@ -38,7 +38,7 @@ def ballgen(w, h, r, st, num):
         x = random.randint(0+s, w-s)
         y = random.randint(0+s, h-s)
         ht = (x-s, y-s)
-        cols = map(colcheck, [(ht, (l[j][0] -s, l[j][1] -s), 2*s) for j in range(i-1)])
+        cols = map(colcheck, [(ht, (l[j][0] -s, l[j][1] -s), 2*s) for j in range(i)])
         while True in cols:
             x = random.randint(0+s, w-s)
             y = random.randint(0+s, h-s)
