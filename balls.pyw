@@ -67,23 +67,24 @@ while True:
         display.blit(titlefont.render('balls', True, (0,0,0)),(140,100))
         display.blit(ffont.render('count the number of balls on each screen as fast as possible', True, (0,0,0)),(140,150))
         display.blit(ffont.render('then press the corresponding number key', True, (0,0,0)),(140,200))
-        display.blit(ffont.render('press enter to begin', True, (0,0,0)),(240,300))
+        display.blit(ffont.render('press anything to begin', True, (0,0,0)),(240,300))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN and (event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER):
-                status = 1
-                nn = random.randint(l,u)
-                balls = ballgen(w,h,radius,stuffing, nn)
-                start = datetime.datetime.now()
-                score = 0
-                times = []
-                X = 0
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                else:
+                    status = 1
+                    nn = random.randint(l,u)
+                    balls = ballgen(w,h,radius,stuffing, nn)
+                    start = datetime.datetime.now()
+                    score = 0
+                    times = []
+                    X = 0
         
     if status == 1:
         try:
@@ -157,6 +158,9 @@ while True:
             pygame.display.update()
             
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER or event.key == pygame.K_ESCAPE:
                         pygame.quit()
